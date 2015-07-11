@@ -7,5 +7,7 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'chimehack_server.views.login')
+    url(r'^$', 'chimehack_server.views.login'),
+    url(r'^setup$', 'chimehack_server.views.setup'),
+    url(r'^settings$', 'chimehack_server.views.settings'),
 ]
