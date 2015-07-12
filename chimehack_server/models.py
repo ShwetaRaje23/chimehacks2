@@ -7,3 +7,4 @@ class Setting(models.Model):
     call = models.CharField(max_length=100)
     redAlertContact = models.CharField(max_length=100)
     secretKey = models.CharField(max_length=100)
+    dailyMessage = models.CharField(max_length=100)

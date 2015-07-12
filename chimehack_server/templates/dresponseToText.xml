@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
 <Message to="{{ fromNum }}" from="+12132634357">
-Thanks for the message. -Cute Cat 
+	<Body>Meow Cat is here for you! 
+		Please respond with:
+		"M" for another image, "T" for terms and conditions(request for help), and "I" anytime you want to see these instructions again. 
+	</Body>
+	<Media>http://newartcolorz.com/images/2014/1/cute-cat-9281-9771-hd-wallpapers.jpg</Media>
 </Message></Response>

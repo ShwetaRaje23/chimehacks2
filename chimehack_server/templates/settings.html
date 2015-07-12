@@ -3,10 +3,14 @@
   <title>Settings</title>
 {% endblock %}
 {% block content %}
+  {% if message %}
+    <div style="color:green"> " "{{message}}</div>
+  {% endif %}
+  <h1>Meow Cat Settings</h1>
   <form class="form-signin" method="post" action="{% url 'settings' %}" enctype="multipart/form-data">
     <div class="form-group">
       <label for="usr">Emergency Contact</label>
-      <input type="tel" name="emergencyContact" class="form-control" id="usr" placeholder = "Enter your emergency contact" value="{{ emergencyContact }}">
+      <input type="tel" name="emergencyContact" class="form-control" id="usr" placeholder = "Enter your emergency contact" value="{{ emergencyContact }}" required>
     </div>
 	  <div class="checkbox">
       <label><input type="checkbox" name="SMS" value="SMS" {% if SMS %}checked{% endif %}>SMS</label>
@@ -14,14 +18,20 @@
     </div>
     <div class="form-group">
       <label for="usr">Red Alert Contact</label>
-      <input type="tel" name="redAlertContact" class="form-control" id="usr" placeholder = "Enter your Red Alert Contact" value="{{ redAlertContact }}">
+      <input type="tel" name="redAlertContact" class="form-control" id="usr" placeholder = "Enter your Red Alert Contact" value="{{ redAlertContact }}" required>
     </div>
   	<div class="form-group">
       <label for="pwd">Secret key (This will be used to login and call for help through SMS):</label>
+      <p>Your default secret key is your verification code.<br>
+      Please change this secret key to some unique value which you'll remember. In your time of need, message Meow Cat with "T" and your secret key (i.e. T1990). </p>
       <input type="password" name="secretKey" class="form-control" id="pwd" placeholder = "Enter the secret key" value="{{ secretKey }}">
 	  </div>
+    <div class="checkbox">
+      <label><input type="checkbox" name="dailyMessage" value="dailyMessage" {% if dailyMessage %}checked{% endif %}> Receive a daily reminder (along with a funny cat image) from Meow Cat that we are here for you.</label>
+      <br>
+    </div>
     {% csrf_token %}
     <input type="hidden" name="cellphone" value="{{ cellphone }}">
-	  <input type="submit" class="btn btn-info btn-sm">
+	  <input type="submit" class="btn btn-info btn-sm" value="Submit">
   </form>
 {% endblock %}

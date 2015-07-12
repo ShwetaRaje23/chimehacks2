@@ -7,6 +7,8 @@ from chimehack_server.models import Setting
 from django.core.urlresolvers import reverse
 import random
 from django.contrib import messages
+from twilio.rest import TwilioRestClient 
+
 def updateSettingToSession(request, setting):
     request.session['cellphone'] = setting.cellphone
     request.session['emergencyContact'] = setting.emergencyContact
@@ -14,6 +16,7 @@ def updateSettingToSession(request, setting):
     request.session['call'] = setting.call
     request.session['redAlertContact'] = setting.redAlertContact
     request.session['secretKey'] = setting.secretKey
+    request.session['dailyMessage'] = setting.dailyMessage
 def updateErrorToSession(request, errors):
     request.session['errors'] = errors
 def updateCellphoneToSession(request, cellphone):
@@ -33,6 +36,8 @@ def updateSettingFromSession(request, context):
         context.update({'redAlertContact':request.session['redAlertContact']})
     if 'secretKey' in request.session:
         context.update({'secretKey':request.session['secretKey']})
+    if 'dailyMessage' in request.session:
+        context.update({'dailyMessage':request.session['dailyMessage']})    
 def updateCellphoneFromSession(request, context):
     if 'cellphone' in request.session:
         context.update({'cellphone':request.session['cellphone']})
@@ -61,17 +66,30 @@ def signup(request):
         updateErrorToSession(request, ["no cellphone is found"])
         return redirect(reverse(home))
     cellphone = request.POST['cellphone']
+    # TODO validate phone number - num of digits
     updateCellphoneToSession(request, cellphone)
     if Setting.objects.filter(cellphone=cellphone):
         updateErrorToSession(request, ["the cellphone has been registered already"])
         return redirect(reverse('home'))
 
     # TODO usr = cellphone number that should be sent the verification code
-    secretKey = "1234" # "%04d" % random.randint(1, 9999)
+    secretKey = "%04d" % random.randint(1, 9999)
+    # put your own credentials here 
+    ACCOUNT_SID = "AC9434eb9d473cce8c76bc31dd9c16f957" 
+    AUTH_TOKEN = "a9d1e7b45ac625670e619b935316257c" 
+	 
+    client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
+	 
+    client.messages.create(
+        to="+" + cellphone, 
+        from_="+12132634357", 
+        body="Your verification code is " +  secretKey + ". " + " - Meow Cat"
+    )
+
     # verificationCode = secretKey
 
     # create a new user
-    setting = Setting(cellphone = cellphone, secretKey = secretKey)
+    setting = Setting(cellphone = cellphone, secretKey = secretKey, SMS="SMS")
     setting.save()
     updateCellphoneFromSession(request, context)
     updateErrorFromSession(request, context)
@@ -151,12 +169,17 @@ def settings(request):
         setting.call = "call"
     else:
         setting.call = ""
+    if "dailyMessage" in request.POST:
+        setting.dailyMessage = "dailyMessage"
+    else:
+        setting.dailyMessage = ""
     setting.redAlertContact = request.POST['redAlertContact']
     setting.secretKey = request.POST['secretKey']
     setting.save()
     updateSettingToSession(request, setting)
     updateSettingFromSession(request, context)
     updateErrorFromSession(request, context)
+    context.update({"message": "Thanks for signing up! You should receive a text with instructions and your first cat image. Please delete the text if you're uncomfortable with having it on your phone."})
     return render(request, 'settings.html', context)
 
 # default response to a text
