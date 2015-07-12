@@ -1,38 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Register</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-</head>
-<body>
-  
-<div class="container">
-  <div class="form-group">
+{% extends "base.html" %}
+{% block head %}
+  <title>Settings</title>
+{% endblock %}
+{% block content %}
+  <form class="form-signin" method="post" action="{% url 'settings' %}" enctype="multipart/form-data">
+    <div class="form-group">
       <label for="usr">Emergency Contact</label>
-      <input type="tel" class="form-control" id="usr" placeholder = "Enter your emergency contact">
+      <input type="tel" name="emergencyContact" class="form-control" id="usr" placeholder = "Enter your emergency contact" value="{{ emergencyContact }}">
     </div>
-	<div class="checkbox">
-      <label><input type="checkbox">SMS</label>
-	  <label><input type="checkbox">Call</label>
+	  <div class="checkbox">
+      <label><input type="checkbox" name="SMS" value="SMS" {% if SMS %}checked{% endif %}>SMS</label>
+	    <label><input type="checkbox" name="call" value="call" {% if call %}checked{% endif %}>Call</label>
     </div>
     <div class="form-group">
       <label for="usr">Red Alert Contact</label>
-      <input type="tel" class="form-control" id="usr" placeholder = "Enter your Red Alert Contact">
+      <input type="tel" name="redAlertContact" class="form-control" id="usr" placeholder = "Enter your Red Alert Contact" value="{{ redAlertContact }}">
     </div>
-	<div class="form-group">
-  <label for="pwd">Secret key (This will be used to login and call for help through SMS):</label>
-  <input type="password" class="form-control" id="pwd" placeholder = "Enter the secret key">
-	</div>
-	<a href="setup.html" class="btn btn-info btn-sm">Sign Up</a>
-	<a href="login.html" class="btn btn-info btn-sm">Login</a>
-	
-   </form>
-
-</div>
-
-</body>
-</html>
+  	<div class="form-group">
+      <label for="pwd">Secret key (This will be used to login and call for help through SMS):</label>
+      <input type="password" name="secretKey" class="form-control" id="pwd" placeholder = "Enter the secret key" value="{{ secretKey }}">
+	  </div>
+    {% csrf_token %}
+    <input type="hidden" name="cellphone" value="{{ cellphone }}">
+	  <input type="submit" class="btn btn-info btn-sm">
+  </form>
+{% endblock %}

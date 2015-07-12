@@ -1,4 +1,5 @@
 from django.db import models
+
 class Setting(models.Model):
     cellphone = models.CharField(max_length=100)
     emergencyContact = models.CharField(max_length=100)
