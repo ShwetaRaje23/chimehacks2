@@ -16,10 +16,12 @@ def settings(request):
 def home(request):
     context = {}
     return render(request, 'home.html', context)
-def responseToText(request):
+# default response to a text
+# look at the content of the message and decide what to do
+def dresponseToText(request):
     if request.method == 'GET':
       print "before from"
       fromNum = request.GET['From']
       print fromNum
       context = {'fromNum':fromNum}
-      return render(request, 'responseToText.xml', context)
+      return render(request, 'dresponseToText.xml', context)

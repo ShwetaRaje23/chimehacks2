@@ -12,4 +12,6 @@ urlpatterns = [
     url(r'^settings$', 'chimehack_server.views.settings', name='settings'),
     url(r'^home$', 'chimehack_server.views.home', name='home'),
     url(r'^login$', 'chimehack_server.views.login', name='login'),
+    url(r'^dresponseToText$', 'chimehack_server.views.dresponseToText', name='dresponseToText'),
+
 ]
