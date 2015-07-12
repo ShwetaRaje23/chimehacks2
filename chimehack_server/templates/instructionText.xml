@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Response>
-<Message to="{{ fromNum }}" from="+12132634357">
-	<Body>{{content}}
-	</Body>
-	<Media>{{media_url}}</Media>
-</Message></Response>

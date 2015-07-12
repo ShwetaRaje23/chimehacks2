@@ -14,6 +14,8 @@ urlpatterns = [
     url(r'^dresponseToText$', 'chimehack_server.views.dresponseToText', name='dresponseToText'),
     url(r'^login$', 'chimehack_server.views.login', name='login'),
     url(r'^verification$', 'chimehack_server.views.verification', name='verification'),
-    url(r'^contactHelp$', 'chimehack_server.views.contactHelp', name='contactHelp'),
+    url(r'^contactHelp/(?P<id>\d+)$', 'chimehack_server.views.contactHelp', name='contactHelp'),
+    url(r'^responseToText$', 'chimehack_server.views.responseToText', name='responseToText'),
+
 
 ]

@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 import random
 from django.contrib import messages
 from twilio.rest import TwilioRestClient 
+from django.views.decorators.csrf import csrf_exempt
 
 def updateSettingToSession(request, setting):
     request.session['cellphone'] = setting.cellphone
@@ -191,7 +192,7 @@ def settings(request):
         to="+" + setting.cellphone, 
         from_="+12132634357", 
         body='>>> Meow Cat is here for you! Please respond with: "M" for another image, "T" for terms and conditions (request for help), and "I" anytime you want to see these instructions again. - Meow Cat',
-        medxia_url='http://newartcolorz.com/images/2014/1/cute-cat-9281-9771-hd-wallpapers.jpg'
+        media_url='http://newartcolorz.com/images/2014/1/cute-cat-9281-9771-hd-wallpapers.jpg'
     )
     return render(request, 'settings.html', context)
 
@@ -214,15 +215,17 @@ def responseToText(request):
       content = ""
       media_url = ""
       if(bodyContent == 'I'):
+        print "Received an I message"  
         content = 'Meow Cat is here for you! Please respond with: "M" for another image, "T" for terms and conditions (request for help), and "I" anytime you want to see these instructions again. - Meow Cat'
       if(bodyContent == 'T'):
+        print "Received a T message"  
         # send text to local authorities asking for help
         ACCOUNT_SID = "AC9434eb9d473cce8c76bc31dd9c16f957" 
         AUTH_TOKEN = "a9d1e7b45ac625670e619b935316257c" 
      
         client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
-        setting = Setting.objects.get(cellphone=fromNum)
-        url = 'https://chimehacks2-amanicka1.c9.io/contactHelp?who=' + setting.cellphone
+        setting = Setting.objects.get(cellphone=fromNum[1:])
+        url = 'https://chimehacks2-amanicka1.c9.io/contactHelp/' +setting.cellphone
         call = client.calls.create(url=url,
           to="+" + setting.redAlertContact,
           from_="+12132634357")
@@ -230,16 +233,18 @@ def responseToText(request):
         # send text to person asking for help
         content = 'Meow Cat is on the way!'
       if(bodyContent == 'M'):
+        print "Received a M message"  
         content = "Here's your meow cat of the day:"
         media_url = cats[random.randint(0,2)]
 
       print fromNum
       context = {'fromNum':fromNum, 'content': content, 'media_url': media_url}
-      return render(request, 'instructionText.xml', context)
+      return render(request, 'responseToText.xml', context)
 
-def contactHelp(request):
+@csrf_exempt
+def contactHelp(request, id):
     context = {}
-    print request.GET
-    context.update({'who': request.GET['who']})
+    print request.POST
+    context.update({'who': id})
     return render(request, 'contactHelp.xml', context)
 

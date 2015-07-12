@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say voice="alice">Someone has requested help via Meow Cat at phone number" + {{who}}</Say>
+    <Say voice="alice">Someone has requested help via Meow Cat at phone number {{who}}</Say>
 </Response>
