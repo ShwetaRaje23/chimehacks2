@@ -1,8 +1,17 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block head %}
   <title>Home</title>
+  <link href="{% static 'register.css' %}" rel='stylesheet' />
+{% endblock %}
+{% block precontent %}
+  <div class = "logo">
+  <img src = "{% static 'logo.png' %}"></img>
+  </div>
 {% endblock %}
 {% block content %}
+<br>
+<br>
   <h1>Welcome to Meow Cat!</h1>
   <form action="{% url 'signup' %}" method="POST">
     <div class="form-group">
