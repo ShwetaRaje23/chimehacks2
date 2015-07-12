@@ -12,22 +12,18 @@
   
 <div class="container">
   <div class="form-group">
+   <form action="{% url 'signup' %}" method="POST">
       <label for="usr">Phone Number</label>
-      <input type="tel" class="form-control" id="usr" placeholder = "Enter your phone number">
+      <input type="tel" name="cellphone" class="form-control" id="usr" placeholder = "Enter your phone number">
     </div>
     <div class="checkbox">
       <label><input type="checkbox"> Remember me</label>
     </div>
-  <input type="button" class="btn btn-info btn-sm" onclick="signup()" value="Sign Up">
-	<a href="{% url 'login' %}" class="btn btn-info btn-sm">Login</a>
+    {% csrf_token %}
+  <input type="submit" class="btn btn-info btn-sm" value="Sign Up">
+  <a href="{% url 'login' %}" class="btn btn-info btn-sm">Login</a>
    </form>
 </div>
 </div>
-
-<script>
-function signup() {
-  window.location.href = "{% url 'signup' %}?usr=" + document.getElementById('usr').value;
-}
-</script>
 </body>
 </html>

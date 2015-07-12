@@ -3,14 +3,21 @@ from django.template import RequestContext, loader
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
 from django.contrib.auth.models import User
-
+from chimehack_server.models import Setting
 
 def signup(request):
-    if not 'usr' in request.GET:
+    # linked from home
+    print request.POST
+    if not 'cellphone' in request.POST:
         context = {'error' : 'phone can not be empty'}
-        return renderer(request, 'home.html', context)
+        print "no cellphone is provided"
+        return render(request, 'home.html', context)
+    cellphone = request.POST['cellphone']
+    setting = Setting(cellphone = cellphone)
+    setting.save()
     # TODO usr = cellphone number that should be sent the verification code
-    context = {'usr':request.GET['usr']}
+    token = "1234"
+    context = {'cellphone':cellphone}
     return render(request, 'signup.html', context)
 def settings(request):
     context = {}
@@ -26,7 +33,6 @@ def register(request):
     print request.POST['password1']
     new_user = User.objects.create_user(username=request.POST['username'],
                                         password=request.POST['password1'])
-    # new_user.is_active = False
     new_user.save()
     # TODO send random verification code cellphone number
     context.update({'usr':request.POST['username']})
