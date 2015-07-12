@@ -13,7 +13,7 @@ def updateSettingToSession(request, setting):
     request.session['cellphone'] = setting.cellphone
     request.session['emergencyContact'] = setting.emergencyContact
     request.session['SMS'] = setting.SMS
-    request.session['call'] = setting.call
+    request.session['MMS'] = setting.MMS
     request.session['redAlertContact'] = setting.redAlertContact
     request.session['secretKey'] = setting.secretKey
     request.session['dailyMessage'] = setting.dailyMessage
@@ -30,8 +30,8 @@ def updateSettingFromSession(request, context):
         context.update({'emergencyContact':request.session['emergencyContact']})
     if 'SMS' in request.session:
         context.update({'SMS':request.session['SMS']})
-    if 'call' in request.session:
-        context.update({'call':request.session['call']})
+    if 'MMS' in request.session:
+        context.update({'MMS':request.session['MMS']})
     if 'redAlertContact' in request.session:
         context.update({'redAlertContact':request.session['redAlertContact']})
     if 'secretKey' in request.session:
@@ -77,9 +77,9 @@ def signup(request):
     # put your own credentials here 
     ACCOUNT_SID = "AC9434eb9d473cce8c76bc31dd9c16f957" 
     AUTH_TOKEN = "a9d1e7b45ac625670e619b935316257c" 
-	 
+     
     client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
-	 
+     
     client.messages.create(
         to="+" + cellphone, 
         from_="+12132634357", 
@@ -167,10 +167,10 @@ def settings(request):
         setting.SMS = "SMS"
     else:
         setting.SMS = ""
-    if "call" in request.POST:
-        setting.call = "call"
+    if "MMS" in request.POST:
+        setting.MMS = "MMS"
     else:
-        setting.call = ""
+        setting.MMS = ""
     if "dailyMessage" in request.POST:
         setting.dailyMessage = "dailyMessage"
     else:
@@ -181,7 +181,18 @@ def settings(request):
     updateSettingToSession(request, setting)
     updateSettingFromSession(request, context)
     updateErrorFromSession(request, context)
-    context.update({"message": "Thanks for signing up! You should receive a text with instructions and your first cat image. Please delete the text if you're uncomfortable with having it on your phone."})
+    context.update({"message": "You've successfully updated your settings! You should receive a text with instructions and your first cat image. Please delete the text if you're uncomfortable with having it on your phone."})
+    ACCOUNT_SID = "AC9434eb9d473cce8c76bc31dd9c16f957" 
+    AUTH_TOKEN = "a9d1e7b45ac625670e619b935316257c" 
+     
+    client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
+     
+    client.messages.create(
+        to="+" + setting.cellphone, 
+        from_="+12132634357", 
+        body='>>> Meow Cat is here for you! Please respond with: "M" for another image, "T" for terms and conditions (request for help), and "I" anytime you want to see these instructions again. - Meow Cat',
+        medxia_url='http://newartcolorz.com/images/2014/1/cute-cat-9281-9771-hd-wallpapers.jpg'
+    )
     return render(request, 'settings.html', context)
 
 # default response to a text
@@ -193,3 +204,42 @@ def dresponseToText(request):
       print fromNum
       context = {'fromNum':fromNum}
       return render(request, 'dresponseToText.xml', context)
+
+def responseToText(request):
+    cats = ['http://i.ytimg.com/vi/GchUiYAmlLM/maxresdefault.jpg','http://i.ytimg.com/vi/icqDxNab3Do/maxresdefault.jpg', 'http://wallpaper-download.net/wallpapers/football-wallpapers-funny-cats-smile-wallpaper-31607.jpg']
+    
+    if request.method == 'GET':
+      fromNum = request.GET['From']
+      bodyContent = request.GET['Body']
+      content = ""
+      media_url = ""
+      if(bodyContent == 'I'):
+        content = 'Meow Cat is here for you! Please respond with: "M" for another image, "T" for terms and conditions (request for help), and "I" anytime you want to see these instructions again. - Meow Cat'
+      if(bodyContent == 'T'):
+        # send text to local authorities asking for help
+        ACCOUNT_SID = "AC9434eb9d473cce8c76bc31dd9c16f957" 
+        AUTH_TOKEN = "a9d1e7b45ac625670e619b935316257c" 
+     
+        client = TwilioRestClient(ACCOUNT_SID, AUTH_TOKEN) 
+        setting = Setting.objects.get(cellphone=fromNum)
+        url = 'https://chimehacks2-amanicka1.c9.io/contactHelp?who=' + setting.cellphone
+        call = client.calls.create(url=url,
+          to="+" + setting.redAlertContact,
+          from_="+12132634357")
+        
+        # send text to person asking for help
+        content = 'Meow Cat is on the way!'
+      if(bodyContent == 'M'):
+        content = "Here's your meow cat of the day:"
+        media_url = cats[random.randint(0,2)]
+
+      print fromNum
+      context = {'fromNum':fromNum, 'content': content, 'media_url': media_url}
+      return render(request, 'instructionText.xml', context)
+
+def contactHelp(request):
+    context = {}
+    print request.GET
+    context.update({'who': request.GET['who']})
+    return render(request, 'contactHelp.xml', context)
+
