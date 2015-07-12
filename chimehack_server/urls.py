@@ -7,8 +7,9 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'chimehack_server.views.login'),
-    url(r'^setup$', 'chimehack_server.views.setup'),
-    url(r'^settings$', 'chimehack_server.views.settings'),
-    url(r'^register$', 'chimehack_server.views.register'),
+    url(r'^$', 'chimehack_server.views.home'),
+    url(r'^signup$', 'chimehack_server.views.signup', name='signup'),
+    url(r'^settings$', 'chimehack_server.views.settings', name='settings'),
+    url(r'^home$', 'chimehack_server.views.home', name='home'),
+    url(r'^login$', 'chimehack_server.views.login', name='login'),
 ]

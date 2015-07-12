@@ -7,12 +7,12 @@ def login(request):
 	template = loader.get_template('login.html')
 	context = RequestContext(request, {})
 	return HttpResponse(template.render(context))
-def setup(request):
+def signup(request):
     context = {}
-    return render(request, 'setup.html', context)
+    return render(request, 'signup.html', context)
 def settings(request):
     context = {}
     return render(request, 'settings.html', context)
-def register(request):
+def home(request):
     context = {}
-    return render(request, 'register.html', context)
+    return render(request, 'home.html', context)
