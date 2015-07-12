@@ -13,3 +13,6 @@ def setup(request):
 def settings(request):
     context = {}
     return render(request, 'settings.html', context)
+def register(request):
+    context = {}
+    return render(request, 'register.html', context)
