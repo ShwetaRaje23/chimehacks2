@@ -16,3 +16,10 @@ def settings(request):
 def home(request):
     context = {}
     return render(request, 'home.html', context)
+def responseToText(request):
+    if request.method == 'GET':
+      print "before from"
+      fromNum = request.GET['From']
+      print fromNum
+      context = {'fromNum':fromNum}
+      return render(request, 'responseToText.xml', context)
