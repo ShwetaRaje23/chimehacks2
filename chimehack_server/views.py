@@ -144,6 +144,8 @@ def settings(request):
         if not Setting.objects.filter(cellphone=cellphone, secretKey=secretKey):
             updateErrorToSession(request, ["the secretKey is incorrect"])
             return redirect(reverse('home'))
+        setting = Setting.objects.get(cellphone=cellphone)
+        updateSettingToSession(request, setting)
         updateSettingFromSession(request, context)
         updateErrorFromSession(request, context)
         return render(request, 'settings.html', context)
