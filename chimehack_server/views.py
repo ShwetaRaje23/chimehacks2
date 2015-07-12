@@ -8,7 +8,7 @@ def login(request):
 	context = RequestContext(request, {})
 	return HttpResponse(template.render(context))
 def signup(request):
-    context = {}
+    context = {'usr':request.GET['usr']}
     return render(request, 'signup.html', context)
 def settings(request):
     context = {}

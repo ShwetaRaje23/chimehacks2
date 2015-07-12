@@ -18,13 +18,16 @@
     <div class="checkbox">
       <label><input type="checkbox"> Remember me</label>
     </div>
-	
-	<a href="{% url 'signup' %}" class="btn btn-info btn-sm">Sign Up</a>
+  <input type="button" class="btn btn-info btn-sm" onclick="signup()" value="Sign Up">
 	<a href="{% url 'login' %}" class="btn btn-info btn-sm">Login</a>
-	
    </form>
 </div>
 </div>
 
+<script>
+function signup() {
+  window.location.href = "{% url 'signup' %}?usr=" + document.getElementById('usr').value;
+}
+</script>
 </body>
 </html>
