@@ -1,41 +1,23 @@
 {% extends "base.html" %}
-{% load staticfiles %}
 {% block head %}
   <title>Login in</title>
 {% endblock %}
-
-<div class="container">
-  <div class="form-group">
-   <form class="form-signin" method="post" action="{% url 'login' %}" enctype="multipart/form-data">
-
-          <div class="form-group">
-            <label for="inputUsername">Username</label>
-            <input id="inputUsername" class="form-control" placeholder="Username" required autofocus name="username">
-          </div>
-          <div class="form-group">
-            <label for="inputPassword">Password</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
-          </div>
-
-<!--
+{% block content %}
+  <form class="form-signin" method="post" action="{% url 'login' %}" enctype="multipart/form-data">
+    <div class="form-group">
       <label for="usr">Phone Number</label>
-      <input type="tel" class="form-control" id="usr" placeholder = "Enter your phone number">
+      <input type="tel" name="cellphone" class="form-control" id="usr" placeholder = "Enter your phone number">
     </div>
-	<div class="form-group">
-  <label for="pwd">Secret key:</label>
-  <input type="password" class="form-control" id="pwd" placeholder = "Enter the secret key">
-	</div>
--->
+	  <div class="form-group">
+      <label for="pwd">Secret key:</label>
+      <input type="password" name="secretKey" class="form-control" id="pwd" placeholder = "Enter the secret key">
+	  </div>
     <!--
     <div class="checkbox">
       <label><input type="checkbox"> Remember me</label>
     </div>
     -->
-      {% csrf_token %}
-      <button type="submit" class="btn btn-info btn-sm">Sign In</button>
-   </form>
-</div>
-</div>
-
-</body>
-</html>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-info btn-sm">Sign In</button>
+  </form>
+{% endblock %}

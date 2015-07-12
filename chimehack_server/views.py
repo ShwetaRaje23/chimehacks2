@@ -92,6 +92,26 @@ def verification(request):
         updateErrorToSession(request, ["the code is incorrect"])
         return redirect(reverse('signup'))
     return redirect(reverse('settings'))
+def login(request):
+    context = {}
+    if request.method == 'GET':
+        updateCellphoneFromSession(request, context)
+        updateErrorFromSession(request, context)
+        return render(request, 'login.html', context)
+    if request.method != 'POST':
+        updateErrorToSession(request, ["unknown request"])
+        return redirect(reverse('home'))
+    if not 'cellphone' in request.POST or not 'secretKey' in request.POST:
+        updateErrorToSession(request, ["cellphone or secretKey is not found"])
+        return redirect(reverse('home'))
+    cellphone = request.POST['cellphone']
+    updateCellphoneToSession(request, cellphone)
+    secretKey = request.POST['secretKey']
+    updateSecretKeyToSession(request, secretKey)
+    if not Setting.objects.filter(cellphone=cellphone, secretKey=secretKey):
+        updateErrorToSession(request, ["the cellphone and secretKey is not matched"])
+        return redirect(reverse('login'))
+    return redirect(reverse('settings'))
 def settings(request):
     context = {}
     if request.method == 'GET':

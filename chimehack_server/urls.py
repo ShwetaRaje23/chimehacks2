@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^settings$', 'chimehack_server.views.settings', name='settings'),
     url(r'^home$', 'chimehack_server.views.home', name='home'),
     url(r'^dresponseToText$', 'chimehack_server.views.dresponseToText', name='dresponseToText'),
-    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'login.html'}, name='login'),
+    url(r'^login$', 'chimehack_server.views.login', name='login'),
     url(r'^verification$', 'chimehack_server.views.verification', name='verification'),
 ]
