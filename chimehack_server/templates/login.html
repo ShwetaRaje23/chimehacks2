@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load staticfiles %}
 <html lang="en">
 <head>
   <title>Login in</title>
@@ -12,6 +13,18 @@
   
 <div class="container">
   <div class="form-group">
+   <form class="form-signin" method="post" action="{% url 'login' %}">
+
+          <div class="form-group">
+            <label for="inputUsername">Username</label>
+            <input id="inputUsername" class="form-control" placeholder="Username" required autofocus name="username">
+          </div>
+          <div class="form-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required name="password">
+          </div>
+
+<!--
       <label for="usr">Phone Number</label>
       <input type="tel" class="form-control" id="usr" placeholder = "Enter your phone number">
     </div>
@@ -19,10 +32,14 @@
   <label for="pwd">Secret key:</label>
   <input type="password" class="form-control" id="pwd" placeholder = "Enter the secret key">
 	</div>
+-->
+    <!--
     <div class="checkbox">
       <label><input type="checkbox"> Remember me</label>
     </div>
-  <a href="settings.html" class="btn btn-info btn-sm">Submit</a>
+    -->
+      {% csrf_token %}
+      <button type="submit" class="btn btn-info btn-sm">Sign In</button>
    </form>
 </div>
 </div>
